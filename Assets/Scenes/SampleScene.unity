@@ -77030,6 +77030,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2861825320818239206, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
+      propertyPath: enemyDetectionRange
+      value: 1.9
+      objectReference: {fileID: 0}
     - target: {fileID: 3102162079815532316, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -77606,6 +77610,10 @@ PrefabInstance:
     - target: {fileID: 7255765792852438601, guid: 9de425db004518b41b925d6d04039251, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 72.3513
+      objectReference: {fileID: 0}
+    - target: {fileID: 7318649626951875596, guid: 9de425db004518b41b925d6d04039251, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7470002526010045671, guid: 9de425db004518b41b925d6d04039251, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

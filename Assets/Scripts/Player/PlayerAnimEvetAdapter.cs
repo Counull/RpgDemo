@@ -28,7 +28,7 @@ namespace Player {
             _animator = GetComponent<Animator>();
         }
 
-        public void TriggerAttacking() {
+        public void TriggerAttack() {
             _animator.SetTrigger(AttackHash);
             IsAttackingTriggered = true;
         }

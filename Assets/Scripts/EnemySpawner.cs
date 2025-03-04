@@ -11,7 +11,8 @@ public class EnemySpawner : MonoBehaviour {
 
 [Serializable]
 public struct EnemySpawnAttribute {
-    [ShowInInspector] public EnemyController EnemyController;
+    [ShowInInspector] public EnemyController enemyController;
+
     public uint spawnCountMax;
     [HideInInspector] public uint spawnCountCurrent;
 }

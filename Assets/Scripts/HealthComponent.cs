@@ -5,7 +5,8 @@ using UnityEngine;
 public class HealthComponent : MonoBehaviour {
     public event Action OnDead;
     private float _currentHealth;
-    bool IsDead => CurrentHealth <= 0;
+    
+   public bool IsDead => CurrentHealth <= 0;
     [ShowInInspector] public float MaxHealth { get; set; }
 
 

@@ -71,11 +71,7 @@ public class RockerController : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
 
 
-    void BindToInputSystem() {
-        var inputActions = new InputSystem_Actions();
-        var playerMoveAction = inputActions.Player.Move;
-       
-    }
+    
 
   
 }
