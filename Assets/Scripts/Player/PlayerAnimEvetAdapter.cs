@@ -7,10 +7,21 @@ namespace Player {
         private static readonly int DeadHash = Animator.StringToHash("IsDead");
         private static readonly int AttackHash = Animator.StringToHash("Attack");
 
+        public event Action<bool> OnAnimAttackStatusChange;
+
         Animator _animator;
 
 
-        public bool IsAnimAttacking { get; private set; }
+        private bool _isAnimAttacking;
+
+        public bool IsAnimAttacking {
+            get => _isAnimAttacking;
+            private set {
+                _isAnimAttacking = value;
+                if (!IsAnimAttacking) IsAttackingTriggered = false;
+                OnAnimAttackStatusChange?.Invoke(value);
+            }
+        }
 
         public bool Running {
             get => _animator.GetBool(RunningHash);
@@ -33,9 +44,10 @@ namespace Player {
             IsAttackingTriggered = true;
         }
 
+
+        //动画响应事假，当动画播放到攻击关键帧时表示攻击起效
         public void OnAnimAttacking(int attacking) {
             IsAnimAttacking = attacking == 1;
-            if (!IsAnimAttacking) IsAttackingTriggered = false;
         }
     }
 }

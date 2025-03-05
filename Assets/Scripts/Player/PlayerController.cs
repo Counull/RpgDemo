@@ -11,6 +11,7 @@ namespace Player {
         [SerializeField] private float enemyDetectionRange = 10.0f;
         [SerializeField] private float enemyDetectionAngle = 30.0f;
         [SerializeField] private Vector3 enemyDetectionOffset = new Vector3(0, 1, 0);
+        [SerializeField] private DmgSrcComponent currentWeapon;
         private PlayerAnimAdapter _animAdapter;
         private PlayerMovement _playerMovement;
         private HealthComponent _healthComponent;
@@ -19,11 +20,18 @@ namespace Player {
 
 
         void Start() {
+            if (currentWeapon) currentWeapon.enabled = false;
+
             _animAdapter = GetComponentInChildren<PlayerAnimAdapter>();
             _playerMovement = GetComponent<PlayerMovement>();
             _healthComponent = GetComponent<HealthComponent>();
-            _playerMovement.PlayerMovementStatusChange += (moving) => { _animAdapter.Running = moving; };
             _healthComponent.OnDead += OnDead;
+            _playerMovement.PlayerMovementStatusChange += (moving) => { _animAdapter.Running = moving; }; //跑步动画调度
+            _animAdapter.OnAnimAttackStatusChange += (attacking) => {
+                //根据动画判定攻击是否生效
+                if (!currentWeapon) throw new Exception("No weapon found");
+                currentWeapon.enabled = attacking;
+            };
         }
 
         private void OnDead() {
@@ -34,23 +42,22 @@ namespace Player {
 
 
         private void Update() {
-            CheckForEnemies();
+            if (CheckForEnemies()) {
+                DetectedEnemyInCurrentFrame();
+            }
         }
 
-        private void CheckForEnemies() {
-            if (_animAdapter.IsAttackingTriggered) return;
-
+        private bool CheckForEnemies() {
+            if (_animAdapter.IsAttackingTriggered) return false;
             _enemyDetectDir = UpdateEnemyDetectDirections();
-
-            if (!_enemyDetectDir.Any(
-                    dir => Physics.Raycast(transform.position + enemyDetectionOffset, dir, out var hit,
-                               enemyDetectionRange)
-                           && hit.collider.CompareTag("Enemy")))
-                return;
-            DetectedEnemyInCurrentFrame();
+            return _enemyDetectDir.Any(
+                dir => Physics.Raycast(transform.position + enemyDetectionOffset, dir, out var hit,
+                           enemyDetectionRange)
+                       && hit.collider.CompareTag("Enemy"));
         }
 
 
+        //更新检测方向
         private Vector3[] UpdateEnemyDetectDirections() {
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             var ret = new[] {

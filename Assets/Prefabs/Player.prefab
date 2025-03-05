@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1615801317079194964}
   - component: {fileID: 2861825320818239206}
   - component: {fileID: 5297049429978661357}
-  - component: {fileID: 2784634314319577781}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -102,6 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96e9b48b8de17334493bbb1aacdcb48b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyDetectionRange: 1.9
+  enemyDetectionAngle: 30
+  enemyDetectionOffset: {x: 0, y: 1, z: 0}
+  currentWeapon: {fileID: 2388240613666915137}
 --- !u!114 &5297049429978661357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,27 +117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 881e2b88a0874111833c9fb2f1d0ca1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &2784634314319577781
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 677110447625909396}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.8
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &4850689177308526429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -805,3 +787,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d09a742a22e4a4caebc7a5f502e796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dmg: 0

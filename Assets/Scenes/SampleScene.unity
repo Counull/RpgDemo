@@ -77026,13 +77026,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2388240613666915137, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
+      propertyPath: dmg
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2388240613666915137, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2600342282972509241, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2861825320818239206, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
-      propertyPath: enemyDetectionRange
-      value: 1.9
       objectReference: {fileID: 0}
     - target: {fileID: 3102162079815532316, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
@@ -77140,7 +77144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8321570836976749100, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321570836976749100, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8392342466789149761, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
