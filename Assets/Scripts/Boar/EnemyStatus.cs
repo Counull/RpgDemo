@@ -24,15 +24,15 @@ namespace Boar {
         public Searching(EnemyStatusContext context) : base(context) { }
 
         public override void Enter() {
-            throw new System.NotImplementedException();
+      
         }
 
         public override void Update() {
-            throw new System.NotImplementedException();
+         
         }
 
         public override void Exit() {
-            throw new System.NotImplementedException();
+       
         }
 
         public override bool ReadyToTransition() {
@@ -44,15 +44,15 @@ namespace Boar {
         public Chasing(EnemyStatusContext context) : base(context) { }
 
         public override void Enter() {
-            throw new System.NotImplementedException();
+       
         }
 
         public override void Update() {
-            throw new System.NotImplementedException();
+        
         }
 
         public override void Exit() {
-            throw new System.NotImplementedException();
+          
         }
 
         public override bool ReadyToTransition() {
@@ -64,15 +64,15 @@ namespace Boar {
         public Attacking(EnemyStatusContext context) : base(context) { }
 
         public override void Enter() {
-            throw new System.NotImplementedException();
+           
         }
 
         public override void Update() {
-            throw new System.NotImplementedException();
+      
         }
 
         public override void Exit() {
-            throw new System.NotImplementedException();
+           
         }
 
         public override bool ReadyToTransition() {
@@ -90,7 +90,7 @@ namespace Boar {
         public override void Update() { }
 
         public override void Exit() {
-            throw new System.NotImplementedException();
+            
         }
 
         public override bool ReadyToTransition() {

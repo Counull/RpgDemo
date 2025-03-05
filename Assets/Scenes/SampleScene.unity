@@ -76763,7 +76763,7 @@ MonoBehaviour:
       Data: 0
     - Name: spawnCountMax
       Entry: 3
-      Data: 50
+      Data: 10
     - Name: Pool
       Entry: 7
       Data: 2|System.Collections.Generic.List`1[[Boar.EnemyController, Assembly-CSharp]],
@@ -77076,14 +77076,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 2388240613666915137, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
-      propertyPath: dmg
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2388240613666915137, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2600342282972509241, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -77147,10 +77139,6 @@ PrefabInstance:
     - target: {fileID: 6031987396055325289, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6053449279611728908, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6262382780972178406, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
       propertyPath: m_Layer
