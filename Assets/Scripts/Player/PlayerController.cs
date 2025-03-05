@@ -12,7 +12,7 @@ namespace Player {
         [SerializeField] private float enemyDetectionAngle = 30.0f;
         [SerializeField] private Vector3 enemyDetectionOffset = new Vector3(0, 1, 0);
         [SerializeField] private DmgSrcComponent currentWeapon;
-        private PlayerAnimAdapter _animAdapter;
+        private BaseAnimAdapter _animAdapter;
         private PlayerMovement _playerMovement;
         private HealthComponent _healthComponent;
 
@@ -22,7 +22,7 @@ namespace Player {
         void Start() {
             if (currentWeapon) currentWeapon.enabled = false;
 
-            _animAdapter = GetComponentInChildren<PlayerAnimAdapter>();
+            _animAdapter = GetComponentInChildren<BaseAnimAdapter>();
             _playerMovement = GetComponent<PlayerMovement>();
             _healthComponent = GetComponent<HealthComponent>();
             _healthComponent.OnDead += OnDead;

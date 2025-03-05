@@ -6,7 +6,7 @@ public class DmgSrcComponent : MonoBehaviour, IFaction {
     [SerializeField] private float dmg;
 
 
-    private void Start() {
+    private void Awake() {
         this.InitFaction(gameObject);
     }
 

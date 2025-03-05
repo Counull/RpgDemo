@@ -1,8 +1,9 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Player {
-    public class PlayerAnimAdapter : MonoBehaviour {
+    public class BaseAnimAdapter : MonoBehaviour {
         private static readonly int RunningHash = Animator.StringToHash("IsRunning");
         private static readonly int DeadHash = Animator.StringToHash("IsDead");
         private static readonly int AttackHash = Animator.StringToHash("Attack");
@@ -30,15 +31,22 @@ namespace Player {
 
         public bool Dead {
             get => _animator.GetBool(DeadHash);
-            set => _animator.SetBool(DeadHash, value);
+            [Button]
+            set {
+                _animator.ResetTrigger(AttackHash);
+                IsAnimAttacking = false;
+                _animator.SetBool(DeadHash, value);
+            }
         }
 
-        public bool IsAttackingTriggered { get; set; }
+        public bool IsAttackingTriggered { get; private set; }
 
         public void Awake() {
             _animator = GetComponent<Animator>();
         }
 
+        //触发攻击动画
+        [Button]
         public void TriggerAttack() {
             _animator.SetTrigger(AttackHash);
             IsAttackingTriggered = true;
@@ -48,6 +56,12 @@ namespace Player {
         //动画响应事假，当动画播放到攻击关键帧时表示攻击起效
         public void OnAnimAttacking(int attacking) {
             IsAnimAttacking = attacking == 1;
+        }
+
+        [Button]
+        public void Reset() {
+            IsAnimAttacking = false;
+            _animator.Rebind();
         }
     }
 }
