@@ -8,5 +8,12 @@ namespace Boar {
         public EnemyController Controller;
         public Transform Transform;
         public BoarAttr Attr;
+        public SearchingArea SearchingArea;
+
+
+        public bool EnemyInAttackRange() {
+            return SearchingArea.NearestPlayerDistanceSq <=
+                   Attr.AttackRange * Attr.AttackRange;
+        }
     }
 }

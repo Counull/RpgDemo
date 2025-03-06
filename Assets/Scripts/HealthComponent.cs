@@ -7,16 +7,17 @@ using UnityEngine.Serialization;
 public class HealthComponent : MonoBehaviour, IFaction {
     public event Action OnDead;
     public event Action<float> OnHealthChange;
-   private float _currentHealth;
+    private float _currentHealth;
 
     public bool IsDead => CurrentHealth <= 0;
     [SerializeField] public float maxHealth;
 
-    [ShowInInspector] 
+    [ShowInInspector]
     public float CurrentHealth {
         get => _currentHealth;
-        
+
         set {
+            if (value < 0) value = 0;
             _currentHealth = value;
             OnHealthChange?.Invoke(_currentHealth);
             if (IsDead) OnDead?.Invoke();
@@ -24,7 +25,6 @@ public class HealthComponent : MonoBehaviour, IFaction {
     }
 
     private void Start() {
-        this.InitFaction(gameObject);
         Reset();
     }
 
@@ -32,5 +32,7 @@ public class HealthComponent : MonoBehaviour, IFaction {
         CurrentHealth = maxHealth;
     }
 
-    public Faction Faction { get; set; }
+    [SerializeField] Faction faction;
+
+    public Faction Faction => faction;
 }

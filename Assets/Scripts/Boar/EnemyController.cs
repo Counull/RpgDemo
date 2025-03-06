@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Boar {
     public abstract class EnemyController : SerializedMonoBehaviour {
-        public abstract string SpawnPool { get; }
+    
         public int PoolId { get; set; }
         public int InstanceId { get; set; }
 

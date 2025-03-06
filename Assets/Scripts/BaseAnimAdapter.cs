@@ -1,4 +1,5 @@
 using System;
+using Boar;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,21 +9,28 @@ namespace Player {
         private static readonly int DeadHash = Animator.StringToHash("IsDead");
         private static readonly int AttackHash = Animator.StringToHash("Attack");
 
-        public event Action<bool> OnAnimAttackStatusChange;
+        //当返回True时表示攻击动画起效 必须触发攻击逻辑
+        public event Action<bool> OnAnimAttackValid;
 
         Animator _animator;
 
 
-        private bool _isAnimAttacking;
+        private bool isAnimAttackingValid;
 
-        public bool IsAnimAttacking {
-            get => _isAnimAttacking;
+        //攻击动画起效在为True时必须触发攻击逻辑抵扣血量，当攻击关键帧结束后会重置IsAttackingTriggered
+        public bool IsAnimAttackingValid {
+            get => isAnimAttackingValid;
             private set {
-                _isAnimAttacking = value;
-                if (!IsAnimAttacking) IsAttackingTriggered = false;
-                OnAnimAttackStatusChange?.Invoke(value);
+                isAnimAttackingValid = value;
+                if (!IsAnimAttackingValid) IsAttackingTriggered = false;
+                OnAnimAttackValid?.Invoke(value);
             }
         }
+
+        //是否在播放攻击动画，但是攻击动画并不一定是攻击起效
+        //通过TriggerAttack()设置为true，又通过IsAnimAttacking设置为false
+        public bool IsAttackingTriggered { get; private set; }
+
 
         public bool Running {
             get => _animator.GetBool(RunningHash);
@@ -34,12 +42,11 @@ namespace Player {
             [Button]
             set {
                 _animator.ResetTrigger(AttackHash);
-                IsAnimAttacking = false;
+                IsAnimAttackingValid = false;
                 _animator.SetBool(DeadHash, value);
             }
         }
 
-        public bool IsAttackingTriggered { get; private set; }
 
         public void Awake() {
             _animator = GetComponent<Animator>();
@@ -55,12 +62,12 @@ namespace Player {
 
         //动画响应事假，当动画播放到攻击关键帧时表示攻击起效
         public void OnAnimAttacking(int attacking) {
-            IsAnimAttacking = attacking == 1;
+            IsAnimAttackingValid = attacking == 1;
         }
 
         [Button]
         public void Reset() {
-            IsAnimAttacking = false;
+            IsAnimAttackingValid = false;
             _animator.Rebind();
         }
     }

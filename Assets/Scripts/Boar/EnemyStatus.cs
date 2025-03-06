@@ -10,11 +10,19 @@ namespace Boar {
             Context = context;
         }
 
-        public abstract void Enter();
+        public virtual void Enter() {
+#if UNITY_EDITOR
+            Debug.Log($"Enter:{GetType().Name}");
+#endif
+        }
 
         public abstract void Update();
 
-        public abstract void Exit();
+        public virtual void Exit() {
+#if UNITY_EDITOR
+            Debug.Log($"Exit:{GetType().Name}");
+#endif
+        }
 
         public virtual bool ReadyToTransition() {
             if (!Context.HealthComponent.IsDead) return false;
@@ -23,7 +31,7 @@ namespace Boar {
         }
 
         protected void Move() {
-            Context.Transform.position += Context.Transform.forward * Context.Attr.Speed * Time.deltaTime;
+            Context.Transform.position += Context.Transform.forward * (Context.Attr.Speed * Time.deltaTime);
         }
     }
 
@@ -35,12 +43,14 @@ namespace Boar {
         public Searching(EnemyStatusContext context) : base(context) { }
 
         public override void Enter() {
+            base.Enter();
             _wanderCoroutine = Context.Controller.StartCoroutine(Wander());
         }
 
         public override void Update() {
             if (!_moving) return;
             if (Context.Transform.position.magnitude > Context.Attr.MaxWanderRadius) {
+                //超出范围转向向中心点
                 Context.Transform.rotation = Quaternion.LookRotation(-Context.Transform.position, Vector3.up);
             }
 
@@ -48,12 +58,20 @@ namespace Boar {
         }
 
         public override void Exit() {
+            base.Exit();
             wanding = false;
-            Context.Controller.StopCoroutine(_wanderCoroutine);
+            if (_wanderCoroutine != null)
+                Context.Controller.StopCoroutine(_wanderCoroutine);
         }
 
         public override bool ReadyToTransition() {
-            return base.ReadyToTransition();
+            if (base.ReadyToTransition()) {
+                return true;
+            }
+
+            if (!Context.SearchingArea.NearestPlayerTrans) return false;
+            NextStatus = new Chasing(Context);
+            return true;
         }
 
 
@@ -71,34 +89,87 @@ namespace Boar {
                     Quaternion.LookRotation(new Vector3(randomVector.x, 0, randomVector.y), Vector3.up);
                 yield return _waitTime;
             }
+
+            _wanderCoroutine = null;
         }
     }
 
     public class Chasing : EnemyStatus {
         public Chasing(EnemyStatusContext context) : base(context) { }
 
-        public override void Enter() { }
+        float _attackRangeSq;
 
-        public override void Update() { }
+        public override void Enter() {
+            base.Enter();
+            _attackRangeSq = Context.Attr.AttackRange * Context.Attr.AttackRange;
+            Context.AnimAdapter.Running = true;
+        }
 
-        public override void Exit() { }
+        public override void Update() {
+            if (!Context.SearchingArea.NearestPlayerTrans) return;
+            var targetDir = Context.SearchingArea.NearestPlayerTrans.position - Context.Transform.position;
+
+            Context.Transform.rotation = Quaternion.LookRotation(targetDir, Vector3.up);
+            Move();
+        }
+
+        public override void Exit() {
+            base.Exit();
+            Context.AnimAdapter.Running = false;
+        }
 
         public override bool ReadyToTransition() {
-            return base.ReadyToTransition();
+            if (base.ReadyToTransition()) {
+                return true;
+            }
+
+            if (Context.SearchingArea.NearestPlayerTrans) {
+                if (!Context.EnemyInAttackRange()) return false; //如果距离不够就继续追
+                NextStatus = new Attacking(Context); // 否则进入攻击状态
+                return true;
+            }
+
+            //丢失目标继续搜索
+            NextStatus = new Searching(Context);
+            return true;
         }
     }
 
     public class Attacking : EnemyStatus {
         public Attacking(EnemyStatusContext context) : base(context) { }
+        float _attackRangeSq;
 
-        public override void Enter() { }
+        public override void Enter() {
+            base.Enter();
+            _attackRangeSq = Context.Attr.AttackRange * Context.Attr.AttackRange;
+        }
 
-        public override void Update() { }
+        public override void Update() {
+            if (Context.AnimAdapter.IsAttackingTriggered) return;
+            var targetDir = Context.SearchingArea.NearestPlayerTrans.position - Context.Transform.position;
+            Context.Transform.rotation = Quaternion.LookRotation(targetDir, Vector3.up);
+            Context.AnimAdapter.TriggerAttack();
+        }
 
-        public override void Exit() { }
+        public override void Exit() {
+            base.Exit();
+        }
 
         public override bool ReadyToTransition() {
-            return base.ReadyToTransition();
+            if (base.ReadyToTransition()) {
+                return true;
+            }
+
+            if (Context.AnimAdapter.IsAttackingTriggered) return false; //如果还在攻击就不切换
+
+            if (!Context.SearchingArea.NearestPlayerTrans) {
+                NextStatus = new Searching(Context);
+                return true;
+            }
+
+            if (Context.EnemyInAttackRange()) return false;
+            NextStatus = new Chasing(Context);
+            return true;
         }
     }
 
@@ -106,15 +177,20 @@ namespace Boar {
         public Dead(EnemyStatusContext context) : base(context) { }
 
         public override void Enter() {
+            base.Enter();
             Context.AnimAdapter.Dead = true;
+            Context.Controller.Invoke(nameof(Context.Controller.BodyDisappear), 3f);
         }
+
 
         public override void Update() { }
 
-        public override void Exit() { }
+        public override void Exit() {
+            base.Exit();
+        }
 
         public override bool ReadyToTransition() {
-            return base.ReadyToTransition();
+            return false;
         }
     }
 }

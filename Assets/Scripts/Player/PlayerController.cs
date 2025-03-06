@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -8,8 +9,6 @@ using UnityEngine.Serialization;
 namespace Player {
     [RequireComponent(typeof(PlayerMovement))]
     public class PlayerController : MonoBehaviour {
-        public static int EnemyLayerMask;
-
         [SerializeField] private float enemyDetectionRange = 10.0f;
         [SerializeField] private float enemyDetectionAngle = 30.0f;
         [SerializeField] private Vector3 enemyDetectionOffset = new Vector3(0, 1, 0);
@@ -22,22 +21,27 @@ namespace Player {
         private Vector3[] _enemyDetectDir;
 
         private void Awake() {
-            EnemyLayerMask = LayerMask.GetMask("Enemy");
-        }
-
-        void Start() {
             if (!currentWeapon) throw new Exception("No weapon found");
-            currentWeapon.enabled = false;
 
             _animAdapter = GetComponentInChildren<BaseAnimAdapter>();
             _playerMovement = GetComponent<PlayerMovement>();
             _healthComponent = GetComponent<HealthComponent>();
+        }
+
+        void Start() {
             _healthComponent.OnDead += OnDead;
             _playerMovement.PlayerMovementStatusChange += (moving) => { _animAdapter.Running = moving; }; //跑步动画调度
-            _animAdapter.OnAnimAttackStatusChange += (attacking) => {
+            _animAdapter.OnAnimAttackValid += (attacking) => {
                 //根据动画判定攻击是否生效
-                currentWeapon.enabled = attacking;
+                currentWeapon.Trigger(attacking);
             };
+        }
+
+
+        private void Update() {
+            if (CheckForEnemies()) {
+                _animAdapter.TriggerAttack();
+            }
         }
 
         private void OnDead() {
@@ -47,19 +51,14 @@ namespace Player {
         }
 
 
-        private void Update() {
-            if (CheckForEnemies()) {
-                DetectedEnemyInCurrentFrame();
-            }
-        }
-
         private bool CheckForEnemies() {
             if (_animAdapter.IsAttackingTriggered) return false;
 
             var r = enemyDetectionRange / 2;
             var origin = transform.position + enemyDetectionOffset;
             origin += transform.forward * r;
-            var hitCount = Physics.OverlapSphereNonAlloc(origin, r, _hitColliders, EnemyLayerMask);
+            var hitCount =
+                Physics.OverlapSphereNonAlloc(origin, r, _hitColliders, TagAndLayerHelper.Instance.EnemyLayerMask);
             if (hitCount <= 0) return false;
             for (var i = 0; i < hitCount; i++) {
                 if (_hitColliders[i].TryGetComponent<HealthComponent>(out var healthComponent) &&
@@ -67,14 +66,9 @@ namespace Player {
                     return true;
             }
 
-
             return false;
         }
 
-
-        private void DetectedEnemyInCurrentFrame() {
-            _animAdapter.TriggerAttack();
-        }
 
         private void OnDrawGizmos() {
             if (_enemyDetectDir == null) return;
