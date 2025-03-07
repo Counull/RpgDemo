@@ -119,6 +119,39 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &106529921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 106529922}
+  m_Layer: 0
+  m_Name: =====UI=====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &106529922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106529921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 788451395}
+  - {fileID: 2137555523}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &199396583
 GameObject:
   m_ObjectHideFlags: 0
@@ -76692,7 +76725,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 106529922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -76917,7 +76950,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 106529922}
     m_Modifications:
     - target: {fileID: 3894368421608114543, guid: 3cf7f08d677c20f4a9870fa4083d1949, type: 3}
       propertyPath: m_Name
@@ -77167,6 +77200,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8457539753101793537, guid: b068849940e9b7b4da387f2564c502f3, type: 3}
   m_PrefabInstance: {fileID: 848040717919376297}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &2137555523 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6704471220212305400, guid: 3cf7f08d677c20f4a9870fa4083d1949, type: 3}
+  m_PrefabInstance: {fileID: 980730519}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &848040717919376297
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77389,9 +77427,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1781288769}
+  - {fileID: 106529922}
   - {fileID: 900121653}
-  - {fileID: 980730519}
   - {fileID: 1498579351}
   - {fileID: 330585546}
   - {fileID: 848040717919376297}
-  - {fileID: 788451395}
