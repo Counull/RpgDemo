@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Weapon
-  - UICamera
+  - HealthBarCanvas
   layers:
   - Default
   - TransparentFX
