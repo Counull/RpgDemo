@@ -1,20 +1,33 @@
 using System;
-using DefaultNamespace;
 using UnityEngine;
 
 namespace Boar {
+    /// <summary>
+    ///     根据Trigger判断玩家是否在追逐范围内
+    /// </summary>
     public class SearchingArea : MonoBehaviour {
         [SerializeField] private string targetTag = TagAndLayerHelper.Tags.Player;
 
-        public event Action<bool, Transform> OntTriggeredPlayerChange;
-        public event Action<Transform> OnNearestPlayerChange;
         public Transform NearestPlayerTrans { get; private set; }
         public float NearestPlayerDistanceSq { get; private set; } = float.MaxValue;
+
+
+        public void Reset() {
+            NearestPlayerTrans = null;
+            NearestPlayerDistanceSq = float.MaxValue;
+        }
 
 
         private void OnTriggerEnter(Collider other) {
             if (!other.CompareTag(targetTag)) return;
             OntTriggeredPlayerChange?.Invoke(true, other.transform);
+        }
+
+        private void OnTriggerExit(Collider other) {
+            if (!other.CompareTag(targetTag)) return;
+            if (other.transform == NearestPlayerTrans) NearestPlayerInvalid();
+
+            OntTriggeredPlayerChange?.Invoke(false, other.transform);
         }
 
         private void OnTriggerStay(Collider other) {
@@ -25,10 +38,9 @@ namespace Boar {
             if (!other.TryGetComponent<HealthComponent>(out var healthComponent)) return;
             if (healthComponent.IsDead) {
                 //如果玩家死亡就不计算后续逻辑了
-                if (other.transform == NearestPlayerTrans) {
+                if (other.transform == NearestPlayerTrans)
                     //死亡玩家是最近玩家那么最近玩家无效
                     NearestPlayerInvalid();
-                }
 
                 return;
             }
@@ -46,25 +58,23 @@ namespace Boar {
             NearestPlayerDistanceSq = distanceSq;
         }
 
-        private void OnTriggerExit(Collider other) {
-            if (!other.CompareTag(targetTag)) return;
-            if (other.transform == NearestPlayerTrans) {
-                NearestPlayerInvalid();
-            }
+        /// <summary>
+        ///     玩家是否进出追逐范围
+        /// </summary>
+        public event Action<bool, Transform> OntTriggeredPlayerChange;
 
-            OntTriggeredPlayerChange?.Invoke(false, other.transform);
-        }
+        /// <summary>
+        ///     当所追逐的最近的玩家改变
+        /// </summary>
+        public event Action<Transform> OnNearestPlayerChange;
 
-        void NearestPlayerInvalid() {
+        /// <summary>
+        ///     当最近玩家无效时调用
+        /// </summary>
+        private void NearestPlayerInvalid() {
             NearestPlayerTrans = null;
             NearestPlayerDistanceSq = float.MaxValue;
             OnNearestPlayerChange?.Invoke(null);
-        }
-
-
-        public void Reset() {
-            NearestPlayerTrans = null;
-            NearestPlayerDistanceSq = float.MaxValue;
         }
     }
 }

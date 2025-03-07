@@ -1,23 +1,22 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Player {
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerMovement : MonoBehaviour {
         [SerializeField] private float speed = 5f;
-
         private PlayerInput _playerInput;
-        public Vector3 CurrentFrameMovement { get; private set; }
-        public bool Moving => CurrentFrameMovement != Vector3.zero;
         public Action<bool> PlayerMovementStatusChange;
 
-        void Start() {
+        private bool Moving => CurrentFrameMovement != Vector3.zero;
+        private Vector3 CurrentFrameMovement { get; set; }
+
+        private void Start() {
             _playerInput = GetComponent<PlayerInput>();
         }
 
 
-        void Update() {
+        private void Update() {
             if (_playerInput.InputVector == Vector2.zero) {
                 if (!Moving) return;
                 //如果第一次无输入那么归零CurrentFrameMovement且发送事件

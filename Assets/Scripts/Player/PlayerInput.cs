@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Player {
     public class PlayerInput : MonoBehaviour {
@@ -11,8 +10,8 @@ namespace Player {
             _rockerController = FindFirstObjectByType<RockerController>();
         }
 
-        
-        void Update() {
+
+        private void Update() {
             InputVector = _rockerController.outPos / _rockerController.R;
         }
     }

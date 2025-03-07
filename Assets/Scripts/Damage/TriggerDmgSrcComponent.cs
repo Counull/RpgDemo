@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DefaultNamespace {
+namespace Damage {
+    /// <summary>
+    ///     根据附着的Trigger和动画关键帧触发伤害
+    /// </summary>
     public class TriggerDmgSrcComponent : DmgSrcComponent {
-        private HashSet<int> _hited = new();
+        private readonly HashSet<int> _hited = new();
 
         private void OnDisable() {
             _hited.Clear();
@@ -13,9 +16,7 @@ namespace DefaultNamespace {
             if (!other.TryGetComponent<HealthComponent>(out var healthComponent)) return;
             if (healthComponent.Faction == Faction) return;
             var id = healthComponent.GetInstanceID();
-            if (!_hited.Add(id)) {
-                return;
-            }
+            if (!_hited.Add(id)) return;
 
             //DMG
             healthComponent.CurrentHealth -= dmg;

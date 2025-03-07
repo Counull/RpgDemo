@@ -4,17 +4,21 @@ using Boar;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+/// <summary>
+///     野猪的生成器，初始化时直接根据Prefab生成一定数量的野猪
+///     当野猪死亡进行回收和重新复活野猪
+///     相当于野猪的对象池
+/// </summary>
 public class EnemySpawner : SerializedMonoBehaviour {
     [OdinSerialize] private List<EnemySpawnAttribute> _enemySpawnAttributesList;
 
-    [SerializeField] private Vector2 LT;
-    [SerializeField] private Vector2 RB;
+    [SerializeField] private Vector2 lt;
+    [SerializeField] private Vector2 rb;
 
 
-    private void Awake() { }
+ 
 
 
     private void Start() {
@@ -27,7 +31,7 @@ public class EnemySpawner : SerializedMonoBehaviour {
                 enemy.InstanceId = instanceID;
                 attribute.Pool.Add(enemy);
                 enemy.ShouldRespawn += (poolId, instanceId) => {
-                    //Respawn
+                    //当野猪死亡后会触发此事件 Respawn 
                     enemy.transform.position = RandomInRange();
                     enemy.gameObject.SetActive(true);
                 };
@@ -36,18 +40,21 @@ public class EnemySpawner : SerializedMonoBehaviour {
     }
 
 
-    Vector3 RandomInRange() {
-        return new Vector3(Random.Range(LT.x, RB.x), 0, Random.Range(LT.y, RB.y));
-    }
-
-
+    /// <summary>
+    ///     画出生成范围
+    /// </summary>
     private void OnDrawGizmos() {
         // Spawn范围
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(new Vector3(LT.x, 0, LT.y), new Vector3(RB.x, 0, LT.y));
-        Gizmos.DrawLine(new Vector3(RB.x, 0, LT.y), new Vector3(RB.x, 0, RB.y));
-        Gizmos.DrawLine(new Vector3(RB.x, 0, RB.y), new Vector3(LT.x, 0, RB.y));
-        Gizmos.DrawLine(new Vector3(LT.x, 0, RB.y), new Vector3(LT.x, 0, LT.y));
+        Gizmos.DrawLine(new Vector3(lt.x, 0, lt.y), new Vector3(rb.x, 0, lt.y));
+        Gizmos.DrawLine(new Vector3(rb.x, 0, lt.y), new Vector3(rb.x, 0, rb.y));
+        Gizmos.DrawLine(new Vector3(rb.x, 0, rb.y), new Vector3(lt.x, 0, rb.y));
+        Gizmos.DrawLine(new Vector3(lt.x, 0, rb.y), new Vector3(lt.x, 0, lt.y));
+    }
+
+
+    private Vector3 RandomInRange() {
+        return new Vector3(Random.Range(lt.x, rb.x), 0, Random.Range(lt.y, rb.y));
     }
 }
 
@@ -56,5 +63,5 @@ public class EnemySpawner : SerializedMonoBehaviour {
 public class EnemySpawnAttribute {
     [SerializeField] public EnemyController enemyController;
     public int spawnCountMax;
-    [HideInInspector] public readonly List<EnemyController> Pool = new();
+    public readonly List<EnemyController> Pool = new();
 }
