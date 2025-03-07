@@ -76887,8 +76887,30 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  LT: {x: -25, y: 25}
-  RB: {x: 25, y: -25}
+    - Name: lt
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 25
+    - Name: 
+      Entry: 4
+      Data: -25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: rb
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: -25
+    - Name: 
+      Entry: 4
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
 --- !u!1001 &980730519
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,12 +14,8 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : SerializedMonoBehaviour {
     [OdinSerialize] private List<EnemySpawnAttribute> _enemySpawnAttributesList;
 
-    [SerializeField] private Vector2 lt;
-    [SerializeField] private Vector2 rb;
-
-
- 
-
+    [OdinSerialize] private Vector2 lt;
+    [OdinSerialize] private Vector2 rb;
 
     private void Start() {
         for (var poolId = 0; poolId < _enemySpawnAttributesList.Count; poolId++) {
@@ -63,5 +59,5 @@ public class EnemySpawner : SerializedMonoBehaviour {
 public class EnemySpawnAttribute {
     [SerializeField] public EnemyController enemyController;
     public int spawnCountMax;
-    public readonly List<EnemyController> Pool = new();
+    [ShowInInspector] public readonly List<EnemyController> Pool = new();
 }
